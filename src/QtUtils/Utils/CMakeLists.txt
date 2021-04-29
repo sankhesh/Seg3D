@@ -93,6 +93,9 @@ target_link_libraries(QtUtils_Utils
   QtUtils_Widgets
   ${SCI_GLEW_LIBRARY}
   ${SCI_BOOST_LIBRARY}
+  ${VTK_LIBRARIES}
 )
+
+vtk_module_autoinit(TARGETS QtUtils_Utils MODULES ${VTK_LIBRARIES})
 
 target_link_libraries(QtUtils_Utils Qt5::OpenGL)

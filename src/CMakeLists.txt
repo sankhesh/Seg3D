@@ -303,6 +303,16 @@ if(SEG3D_BUILD_INTERFACE)
     endif()
   endif()
 
+  find_package(VTK
+    COMPONENTS
+      vtkCommonCore
+      vtkCommonDataModel
+      vtkFiltersSources
+      vtkGUISupportQt
+      vtkIOImage
+      vtkRenderingOpenGL2
+      vtkRenderingVolumeOpenGL2
+  REQUIRED QUIET)
 endif()
 
 ###########################################

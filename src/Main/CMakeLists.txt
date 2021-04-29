@@ -117,6 +117,9 @@ if(BUILD_WITH_PYTHON)
   )
 endif()
 
+target_link_libraries(${APPLICATION_NAME} PRIVATE ${VTK_LIBRARIES})
+vtk_module_autoinit(TARGETS ${APPLICATION_NAME} MODULES ${VTK_LIBRARIES})
+
 # add libraries with plug-ins and extensions
 REGISTERED_TARGET_LINK_LIBRARIES(${APPLICATION_NAME})
 
