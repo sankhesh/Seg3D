@@ -31,7 +31,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif 
+#endif
 
 // Glew include
 #include <GL/glew.h>
@@ -51,6 +51,8 @@
 #include <QtUtils/Utils/QtRenderWidget.h>
 #include <QtUtils/Utils/QtTransferFunctionWidget.h>
 
+#include <QVTKRenderWidget.h>
+
 namespace QtUtils
 {
 
@@ -60,9 +62,9 @@ namespace QtUtils
 // Forward declarations
 class QtRenderResourcesContext;
 class QtRenderResourcesContextPrivate;
-typedef boost::shared_ptr< QtRenderResourcesContext > 
+typedef boost::shared_ptr< QtRenderResourcesContext >
   QtRenderResourcesContextHandle;
-typedef boost::shared_ptr< QtRenderResourcesContextPrivate > 
+typedef boost::shared_ptr< QtRenderResourcesContextPrivate >
   QtRenderResourcesContextPrivateHandle;
 
 // Class definition
@@ -81,6 +83,9 @@ public:
   /// CREATE_QT_RENDER_WIDGET:
   /// Create a QtRenderWidget associated with the given viewer.
   QtRenderWidget* create_qt_render_widget( QWidget* parent, Core::AbstractViewerHandle viewer );
+
+  /// Create a vtk render widget
+  QVTKRenderWidget* create_qvtk_render_widget( QWidget* parent, Core::AbstractViewerHandle viewer );
 
   /// CREATE_QT_TRANSFER_FUNCTION_WIDGET:
   /// Create a QtTransferFunctionWidget associated with the given transfer function.

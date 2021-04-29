@@ -33,6 +33,9 @@
 // QtUtils includes
 #include <QtUtils/Utils/QtRenderResources.h>
 
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkNew.h>
+
 namespace QtUtils
 {
 
@@ -146,16 +149,26 @@ bool QtRenderResourcesContext::create_render_context( Core::RenderContextHandle&
   return context->is_valid();
 }
 
-QtRenderWidget* QtRenderResourcesContext::create_qt_render_widget( QWidget* parent, 
+QtRenderWidget* QtRenderResourcesContext::create_qt_render_widget( QWidget* parent,
                           Core::AbstractViewerHandle viewer )
 {
   CORE_LOG_DEBUG( "Create an OpenGL widget" );
 
-  return new QtRenderWidget( this->private_->format_, parent, 
+  return new QtRenderWidget( this->private_->format_, parent,
     this->private_->shared_widget_, viewer );
 }
 
-QtTransferFunctionWidget* QtRenderResourcesContext::create_qt_transfer_function_widget( 
+QVTKRenderWidget* QtRenderResourcesContext::create_qvtk_render_widget( QWidget* parent, Core::AbstractViewerHandle viewer)
+{
+  CORE_LOG_DEBUG( "Create a QVTK widget" );
+
+  QVTKRenderWidget* w = new QVTKRenderWidget(parent);
+  vtkNew<vtkGenericOpenGLRenderWindow> renWin;
+  w->setRenderWindow(renWin);
+  return w;
+}
+
+QtTransferFunctionWidget* QtRenderResourcesContext::create_qt_transfer_function_widget(
   QWidget* parent, Core::TransferFunctionHandle tf )
 {
   return new QtTransferFunctionWidget( this->private_->format_, parent,
@@ -183,10 +196,10 @@ Core::RenderContextHandle QtRenderResourcesContext::get_current_context()
   {
     // NOTE: We don't want to delete the context after the handle goes out of scope,
     // so we pass a NOP deleter to shared_ptr
-    return Core::RenderContextHandle( new QtRenderContext( QGLContextHandle( 
+    return Core::RenderContextHandle( new QtRenderContext( QGLContextHandle(
       const_cast< QGLContext* >( current_context ), SharedPtrNopDeleter() ) ) );
   }
-  
+
   return Core::RenderContextHandle();
 }
 
