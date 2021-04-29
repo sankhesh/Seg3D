@@ -48,6 +48,9 @@
 #include <QtUtils/Utils/QtRenderResources.h>
 #include <QtUtils/Utils/QtRenderWidget.h>
 
+// vtk includes
+#include <QVTKRenderWidget.h>
+
 // Interface includes
 #include <Interface/Application/StyleSheet.h>
 #include <Interface/Application/ViewerWidget.h>
@@ -69,6 +72,7 @@ public:
 
   Ui::ViewerWidget ui_;
   QtUtils::QtRenderWidget* render_widget_;
+  QVTKRenderWidget* vtk_render_widget_;
 
   int minimum_toolbar_width_;
   bool initialized_size_;
@@ -161,15 +165,19 @@ ViewerWidget::ViewerWidget( ViewerHandle viewer, QWidget *parent ) :
   // --------------------------------------
   // Generate the OpenGL part of the widget
   this->private_->render_widget_ = QtUtils::QtApplication::Instance()->
-    qt_renderresources_context()->create_qt_render_widget( this, this->private_->viewer_ );
+    qt_renderresources_context()->create_qt_render_widget( this->private_->ui_.viewer_slot_, this->private_->viewer_ );
+  this->private_->vtk_render_widget_ = QtUtils::QtApplication::Instance()->
+    qt_renderresources_context()->create_qvtk_render_widget( this->private_->ui_.viewer_slot_, this->private_->viewer_ );
 
   if( this->private_->render_widget_ == 0 )
   {
     CORE_THROW_LOGICERROR("OpenGL was not initialized correctly");
   }
 
+  this->private_->vtk_render_widget_->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
   this->private_->render_widget_->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
   this->private_->ui_.viewer_layout_->addWidget( this->private_->render_widget_ );
+  this->private_->ui_.viewer_layout_->addWidget( this->private_->vtk_render_widget_ );
 
   // Update state of the widget to reflect current state
   {
