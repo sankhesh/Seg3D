@@ -39,6 +39,12 @@
 // QtUtils includes
 #include <QtUtils/Utils/QtApplication.h>
 
+// VTK includes
+#include <QVTKRenderWidget.h>
+
+// Qt includes
+#include <QSurfaceFormat>
+
 #include "Seg3DGui.h"
 #include "Seg3DHeadless.h"
 
@@ -52,6 +58,8 @@ using namespace Seg3D;
 int main( int argc, char **argv )
 {
   putenv("LANG=C");
+
+  QSurfaceFormat::setDefaultFormat(QVTKRenderWidget::defaultFormat());
 
   Core::Application::Instance()->parse_command_line_parameters( argc, argv );
   Seg3DBase* app = nullptr;
